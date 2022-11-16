@@ -34,7 +34,54 @@ class Score(db.Model):
     date = db.Column(db.DateTime, nullable=False)
     student_id = db.Column(db.Integer, db.ForeignKey('student.id'))
 
+# create all db tables
 db.create_all()
+
+
+# db table functions
+def create_new_project(proj_name):
+    """
+    Creates a new project, storing it in the Project db table.
+    Returns the Project object after saving it.
+    """
+    with app.app_context():
+        new_project = Project(
+            name = proj_name,
+            date = datetime.now(),
+        )
+        db.session.add(new_project)
+        db.session.commit()
+    return new_project
+
+def create_new_student(student_name, usr_project):
+    """
+    Creates a new student, storing it in the Student db table.
+    Returns the Student object after saving it.
+    """
+    with app.app_context():
+        new_student = Student(
+            name = student_name,
+            project = usr_project,
+        )
+        db.session.add(new_student)
+        db.session.commit()
+    return new_student
+
+def add_new_score(student_score, student_notes, student):
+    """
+    Creates a new score, storing it into the Score db table.
+    Returns the Score object after saving it.
+    """
+    with app.app_context():
+        new_score = Score(
+            Score = student_score,
+            notes = student_notes.lower(),
+            date = datetime.now(),
+            pupil = student,
+        )
+        db.session.add(new_score)
+        db.session.commit()
+    return new_score
 
 
 @app.route("/")
